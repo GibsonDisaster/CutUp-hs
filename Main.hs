@@ -1,7 +1,9 @@
 module Main where
   import System.Random
+  import System.Environment
   import Data.Array.IO
   import Control.Monad
+
   data Line = Line Int [String] deriving (Show, Eq)
   type Song = [Line]
 
@@ -21,11 +23,12 @@ module Main where
 
   main :: IO ()
   main = do
-    ws <- readFile "to_scramble.txt"
+    a <- getArgs
+    ws <- readFile (head a)
     let al = getAllWords ws
     let cl = countLines ws
     shuffled <- shuffle al
-    writeFile "scrambled.txt" $ unlines (mixUpSong cl shuffled)
+    writeFile (last a) $ unlines (mixUpSong cl shuffled)
 
   getAllWords :: String -> [String]
   getAllWords str = concat $ map (\l -> words l) (lines str)
